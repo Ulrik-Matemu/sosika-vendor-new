@@ -25,6 +25,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "../components/ui/select"
+import { toast, Toaster } from "sonner"
 
 export function TabsDemo() {
     const [geolocation, setLocation] = useState("");
@@ -32,7 +33,6 @@ export function TabsDemo() {
 
     const handleValueChange = (value: string) => {
       setSelectedValue(value);
-      console.log("Selected Value:", value); // Optional: Log the selected value
     };
 
     const handleGetLocation = () => {
@@ -72,7 +72,10 @@ export function TabsDemo() {
 
             if (response.ok) {
                 setTimeout(() => {
-                    console.log('Login successful:', data);
+                    localStorage.setItem("vendorId", data.vendorId);
+                    localStorage.setItem("vendorName", vendorName);
+                    localStorage.setItem("token", data.token);
+                    window.location.href = "/dashboard";
                 }, 1500);
             } else {
                 throw new Error(data.error || 'Login failed');
@@ -108,11 +111,11 @@ export function TabsDemo() {
                 }),
             })
 
-            const data = await response.json();
 
             if (response.ok) {
                 setTimeout(() => {
-                    console.log("Registration successful:", data);
+                    window.location.href = "/login";
+                    toast("Account created successfully! Please login.");
                 }, 1500);
             }
         } catch(error) {
@@ -127,6 +130,8 @@ export function TabsDemo() {
     
     
     return (
+        <>
+        <Toaster />
         <div className="flex justify-center items-center min-h-screen px-4">
             <Tabs defaultValue="login" className="w-full max-w-sm">
                 <TabsList className="grid w-full grid-cols-2">
@@ -213,6 +218,7 @@ export function TabsDemo() {
     
             </Tabs>
         </div>
+        </>
     )
 
 }

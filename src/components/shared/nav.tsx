@@ -9,9 +9,9 @@ interface NavItem {
 
 const BottomNav: React.FC = () => {
     const navItems: NavItem[] = [
-        { label: 'Home', icon: <FaHome />, onClick: () => console.log('Home clicked') },
-        { label: 'Orders', icon: <FaHistory />, onClick: () => console.log('Search clicked') },
-        { label: 'Profile', icon: <FaUser />, onClick: () => console.log('Profile clicked') },
+        { label: 'Home', icon: <FaHome />, onClick: () => window.location.href = "/dashboard" },
+        { label: 'Orders', icon: <FaHistory />, onClick: () => window.location.href = "/orders" },
+        { label: 'Profile', icon: <FaUser />, onClick: () => window.location.href = "/profile" },
     ];
 
     return (

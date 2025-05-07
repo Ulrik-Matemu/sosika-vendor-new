@@ -20,11 +20,14 @@ export function DrawerAddMenuItem({ onSubmit }: { onSubmit: (data: any) => void 
   const [description, setDescription] = useState("")
   const [category, setCategory] = useState("lunch")
   const [price, setPrice] = useState("")
+  const [image, setImage] = useState<File | null>(null)
   const [isAvailable, setIsAvailable] = useState(true)
 
   const handleSubmit = () => {
     if (!name || !category || !price) return alert("Please fill all required fields.")
-    onSubmit({ name, description, category, price: parseFloat(price), is_available: isAvailable })
+    if (!image) return alert("Please upload an image.")
+    onSubmit({ name, description, image, category, price: parseFloat(price), is_available: isAvailable })
+    alert("Menu item added successfully.")
   }
 
   return (
@@ -41,17 +44,14 @@ export function DrawerAddMenuItem({ onSubmit }: { onSubmit: (data: any) => void 
 
           <div className="space-y-4">
             <div>
-              <Label>Name</Label>
-              <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Chicken Sandwich" />
+              <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Chicken Sandwich" />
             </div>
 
             <div>
-              <Label>Description</Label>
-              <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Optional" />
+              <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Description" />
             </div>
 
             <div>
-              <Label>Category</Label>
               <Select value={category} onValueChange={setCategory}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select category" />
@@ -67,22 +67,26 @@ export function DrawerAddMenuItem({ onSubmit }: { onSubmit: (data: any) => void 
             </div>
 
             <div>
-              <Label>Price (Tsh)</Label>
               <Input
                 type="number"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
-                placeholder="e.g. 3500"
+                placeholder="3500"
               />
             </div>
 
-            <div className=" items-center justify-between">
-              <Label>Available?</Label>
-              <Switch checked={isAvailable} onCheckedChange={setIsAvailable} />
+            <div className="flex items-center">
+              <Label className="pr-2">Available?</Label>
+              <Switch  checked={isAvailable} onCheckedChange={setIsAvailable} />
             </div>
             <div>
                 <Label>Image</Label>
-                <Input type="file" accept="image/*" />
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="block pt-2 w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#2b2b2b] file:text-[#00bfff] hover:file:bg-[#1a1a1a]"
+                  onChange={(e) => setImage(e.target.files ? e.target.files[0] : null)}
+                />
             </div>
 
           </div>

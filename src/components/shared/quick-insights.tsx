@@ -1,18 +1,52 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const QuickInsights: React.FC = () => {
+    const [orders, setOrders] = useState<any[]>([]);
+    const vendorName = localStorage.getItem("vendorName");
     const getGreeting = () => {
         const hour = new Date().getHours();
-        if (hour < 12) return 'Good Morning';
-        if (hour < 18) return 'Good Afternoon';
-        return 'Good Evening';
+        if (hour < 12) return `Good Morning ${vendorName}`;
+        if (hour < 18) return `Good Afternoon ${vendorName}`;
+        return `Good Evening ${vendorName}`;
     };
 
-    const totalRevenue = 12345; // Replace with actual data
-    const totalOrders = 678; // Replace with actual data
+   
+
+    const fetchOrders = async () => {
+        const vendorId = localStorage.getItem('vendorId');
+        try {
+            const response = await fetch(`https://sosika-backend.onrender.com/api/orders/vendor/${vendorId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const data = await response.json();
+            if (Array.isArray(data)) {
+                setOrders(data);
+            } else {
+                console.error('Unexpected data format:', data);
+            }
+        } catch (error) {
+            console.error('Error fetching orders:', error);
+        }
+    }
+
+    useEffect(() => {
+        fetchOrders();
+    }, []);
+
+
+
+    const totalRevenue =  orders
+    .filter(order => order.order_status === 'completed')
+    .reduce((sum, order) => sum + parseFloat(order.total_amount), 0)
+    .toFixed(2);// Replace with actual data
+    const totalOrders = orders.length; // Replace with actual data
 
     return (
-        <div style={{  fontFamily: 'Arial, sans-serif' }} className='p-5 border-b rounded-b-2xl'>
+        <div className='p-5 border-b rounded-b-2xl'>
             <p style={{ fontSize: '1.5rem', marginBottom: '20px' }}>{getGreeting()}!</p>
             <div style={{ display: 'flex', gap: '20px' }}>
                 <div
