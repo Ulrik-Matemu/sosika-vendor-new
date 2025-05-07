@@ -43,7 +43,7 @@ const QuickInsights: React.FC = () => {
     .filter(order => order.order_status === 'completed')
     .reduce((sum, order) => sum + parseFloat(order.total_amount), 0)
     .toFixed(2);// Replace with actual data
-    const totalOrders = orders.length; // Replace with actual data
+    const totalOrders = orders.filter(order => order.order_status === 'completed').length; // Replace with actual data
 
     return (
         <div className='p-5 border-b rounded-b-2xl'>
@@ -74,6 +74,7 @@ const QuickInsights: React.FC = () => {
                 >
                     <h3 className='text-white text-[10px]'>Total Orders</h3>
                     <p style={{ fontSize: '1.2rem', fontWeight: 'bold' }} className='text-[#00bfff]'>{totalOrders}</p>
+                    <p className=' text-[10px] text-green-400'>completed</p>
                 </div>
             </div>
         </div>
