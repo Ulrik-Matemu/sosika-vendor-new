@@ -144,7 +144,7 @@ export const Dashboard = () => {
         }
     };
 
-    if (loading) return <div className="flex justify-center p-8">Loading menu items...</div>;
+    if (loading) console.log("Loading...");
     if (error) return <div className="text-red-500 p-8">{error}</div>;
 
     return (
