@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaHome,  FaUser,  FaHistory } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 interface NavItem {
     label: string;
@@ -8,10 +9,14 @@ interface NavItem {
 }
 
 const BottomNav: React.FC = () => {
+    const navigate = useNavigate();
+    const navigateToPage = (page: string) => {
+        navigate(page);
+    }
     const navItems: NavItem[] = [
-        { label: 'Home', icon: <FaHome />, onClick: () => window.location.href = "/dashboard" },
-        { label: 'Orders', icon: <FaHistory />, onClick: () => window.location.href = "/orders" },
-        { label: 'Profile', icon: <FaUser />, onClick: () => window.location.href = "/profile" },
+        { label: 'Home', icon: <FaHome />, onClick: () => navigateToPage('/dashboard') },
+        { label: 'Orders', icon: <FaHistory />, onClick: () => navigateToPage('/orders') },
+        { label: 'Profile', icon: <FaUser />, onClick: () => navigateToPage('/profile') },
     ];
 
     return (
