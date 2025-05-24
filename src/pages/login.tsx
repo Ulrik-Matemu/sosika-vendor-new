@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect, useRef, } from "react"
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -26,6 +26,42 @@ import {
     SelectValue,
 } from "../components/ui/select"
 import { toast, Toaster } from "sonner"
+
+
+export function InstallPWAButton() {
+    const [deferredPrompt, setDeferredPrompt] = useState<Event | null>(null);
+    const [visible, setVisible] = useState(false);
+
+    useEffect(() => {
+        const handler = (e: Event) => {
+            e.preventDefault();
+            setDeferredPrompt(e);
+            setVisible(true);
+        };
+        window.addEventListener("beforeinstallprompt", handler as EventListener);
+        return () => {
+            window.removeEventListener("beforeinstallprompt", handler as EventListener);
+        };
+    }, []);
+
+    const handleInstallClick = async () => {
+        if (!deferredPrompt) return;
+        // @ts-ignore
+        deferredPrompt.prompt();
+        // @ts-ignore
+        const { outcome } = await deferredPrompt.userChoice || {};
+        setDeferredPrompt(null);
+        setVisible(false);
+    };
+
+    if (!visible) return null;
+
+    return (
+        <Button variant="default" onClick={handleInstallClick}>
+            Install App
+        </Button>
+    );
+}
 
 export function TabsDemo() {
     const [geolocation, setLocation] = useState("");
@@ -158,6 +194,7 @@ export function TabsDemo() {
                         </CardContent>
                         <CardFooter>
                             <Button className="w-full" onClick={handleLogin}>Login</Button>
+                           
                         </CardFooter>
                     </Card>
                 </TabsContent>
@@ -215,9 +252,13 @@ export function TabsDemo() {
                         </CardFooter>
                     </Card>
                 </TabsContent>
+                
     
             </Tabs>
+            
+            
         </div>
+       
         </>
     )
 

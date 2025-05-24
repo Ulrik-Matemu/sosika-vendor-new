@@ -28,7 +28,36 @@ export const Dashboard = () => {
             return;
         }
 
-        fetchMenuItems(parseInt(vendorId, 10));
+        const cacheKey = `menuItems_${vendorId}`;
+        const cached = localStorage.getItem(cacheKey);
+
+        if (cached) {
+            try {
+                const parsed = JSON.parse(cached);
+                setMenuItems(parsed.items);
+                setLoading(false);
+
+                // Optionally, revalidate in background
+                fetchMenuItems(parseInt(vendorId, 10)).then(() => {
+                    // Update cache after fetch
+                    localStorage.setItem(
+                        cacheKey,
+                        JSON.stringify({ items: menuItems, timestamp: Date.now() })
+                    );
+                });
+                return;
+            } catch {
+                // If cache is corrupted, ignore and fetch fresh
+            }
+        }
+
+        fetchMenuItems(parseInt(vendorId, 10)).then(() => {
+            // Save to cache after fetch
+            localStorage.setItem(
+                cacheKey,
+                JSON.stringify({ items: menuItems, timestamp: Date.now() })
+            );
+        });
     }, [vendorId]);
 
     const fetchMenuItems = async (parsedVendorId: number) => {

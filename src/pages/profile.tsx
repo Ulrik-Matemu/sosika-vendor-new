@@ -30,7 +30,7 @@ const VendorProfile: React.FC = () => {
         password: ''
     });
     const [message, setMessage] = useState({ text: '', color: '' });
-    const [isLoading, setIsLoading] = useState(true);
+  
 
 
 
@@ -53,10 +53,10 @@ const VendorProfile: React.FC = () => {
                 collegeId: vendorData.college_id,
                 password: ''
             });
-            setIsLoading(false);
+            
             if (vendorData.geolocation) initMap(vendorData.geolocation);
         } catch (error) {
-            setIsLoading(false);
+          
             setMessage({
                 text: error instanceof Error ? error.message : 'Error loading vendor details',
                 color: 'red'
@@ -112,14 +112,9 @@ const VendorProfile: React.FC = () => {
     };
 
 
-
-    if (isLoading) {
-        return <div className="text-center text-gray-500 mt-20">Loading vendor details...</div>;
-    }
-
     return (
         <>
-            <Header title='Profile' />
+            <Header className='bg-[#2b2b2b]' title='Sosika Vendor' />
             <div className="min-h-screen bg-gray-100 flex flex-col md:flex-row">
                 {/* Navigation Sidebar */}
 
