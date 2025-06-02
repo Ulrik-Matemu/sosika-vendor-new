@@ -20,6 +20,7 @@ interface Order {
     requested_asap: boolean;
     total_amount: number;
     delivery_fee: number;
+    user_phone: string;
     items: OrderItem[];
 }
 
@@ -454,6 +455,7 @@ const Orders: React.FC = () => {
                                                 ? 'Requested ASAP'
                                                 : `Requested for: ${new Date(modalOrder.requested_datetime).toLocaleString()}`}
                                         </p>
+                                        <p><b>User's Phone</b>: {modalOrder.user_phone}</p>
                                     </div>
 
                                     <h4 className="font-medium mb-2">Items:</h4>
