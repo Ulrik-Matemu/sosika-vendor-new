@@ -45,6 +45,7 @@ self.addEventListener("activate", (event) => {
 self.addEventListener('push', function(event) {
   console.log('[firebase-messaging-sw.js] Push event received:', event);
   // Handle push event as needed
+  
 });
 
 // Handle notification clicks

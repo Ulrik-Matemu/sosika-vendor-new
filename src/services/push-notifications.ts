@@ -40,6 +40,7 @@ export const setupPushNotifications = async () => {
         console.log('FCM Token:', token);
         localStorage.setItem('fcmToken', token);
         // Save this token to your server for sending notifications
+        await submitFcmToken(token);
       }
     } catch (error) {
       console.error('Error setting up push notifications:', error);
@@ -47,29 +48,30 @@ export const setupPushNotifications = async () => {
   }
 
 
-  export const submitFcmToken = async (fcmToken: string) => {
-    const userId = localStorage.getItem("userId");
-    if (!userId) {
-        console.error("User ID not found");
-        return;
-    }
+ export const submitFcmToken = async (fcmToken: string) => {
+  const userId = localStorage.getItem("vendorId");
+  if (!userId) {
+    console.error("User ID not found");
+    return;
+  }
 
-    try {
-        const response = await axios.post(`${API_URL}/auth/fcm-token`, {
-            userId,
-            fcmToken,
-        }, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
+  try {
+    const response = await axios.post(`${API_URL}/auth/fcm-token`, {
+      userId,
+      fcmToken,
+      role: "vendor", // Include role
+    }, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-        console.log("FCM token updated successfully:", response.data);
-    } catch (error) {
-        if (axios.isAxiosError(error)) {
-            console.error("Error updating FCM token:", error.response?.data || error.message);
-        } else {
-            console.error("Unexpected error:", error);
-        }
+    console.log("FCM token updated successfully:", response.data);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Error updating FCM token:", error.response?.data || error.message);
+    } else {
+      console.error("Unexpected error:", error);
     }
-}
+  }
+};
